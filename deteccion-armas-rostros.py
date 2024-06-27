@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
+from datetime import datetime
 import time
+import pytz
 
 # Load YOLO for weapons detection
 net = cv2.dnn.readNet("yolov3_training_2000.weights", "yolov3_testing.cfg")
@@ -71,10 +73,10 @@ while True:
                 class_ids.append(class_id)
 
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, score_threshold=0.5, nms_threshold=0.4)
-    if indexes == 0:
+    if len(indexes) > 0:
         # Print detection message with current time
-        current_time_str = time.strftime("%H:%M:%S")
-        print(f"Weapon detected at {current_time_str}")
+        current_date_time_str = datetime.now(pytz.timezone('America/Buenos_Aires'))
+        print(f"¡ARMA DETECTADA! A las {current_date_time_str}")
 
     # Detect faces using Haar Cascade
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -91,8 +93,8 @@ while True:
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
             color = colors[class_ids[i]]
-            cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
-            cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.putText(img, label, (x, y + 30), font, 3, (0, 0, 255), 3)
 
     cv2.imshow("Image", img)
     key = cv2.waitKey(1)
