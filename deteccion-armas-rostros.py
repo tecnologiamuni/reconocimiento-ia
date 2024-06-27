@@ -13,16 +13,21 @@ colors = np.random.uniform(0, 255, size=(len(classes), 3))
 # Load Haar Cascade for face detection
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-# Function to get video source
-# def get_video_source():
-#     val = input("Enter file name or press Enter to start webcam: \n")
-#     if val == "":
-#         return 0  # 0 for webcam
-#     else:
-#         return val  # filename provided
-
 # Video capture initialization
 cap = cv2.VideoCapture(0)
+
+# Check if the camera opened successfully
+if not cap.isOpened():
+    print("Error: Failed to open the camera.")
+    exit()
+
+# Set the initial window size to a larger resolution
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+# Create a fullscreen window
+cv2.namedWindow("Image", cv2.WINDOW_NORMAL)
+cv2.setWindowProperty("Image", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 # Initialize frame skip counter and time tracking
 frame_skip = 0
